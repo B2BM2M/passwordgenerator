@@ -43,6 +43,22 @@ def add_password():
                 #email_username_input.delete(0, END)
                 password_input.delete(0, END)
 
+# ---------------------------- Search saved password ---------------------------- #
+def find_password():
+    website = website_input.get()
+    try:
+        with open("data.json", "r") as data_file:
+            # Reading old data
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showwarning("Missing file", message="No Data File Found")
+    else:
+        if website in data:
+            email = data[website]["email"]
+            password = data[website]["password"]
+            messagebox.showinfo(title=website, message=f"Email: {email}\nPassword: {password}")
+        else:
+            messagebox.showwarning("name not found", message=f"No details for the {website} exists")
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -89,7 +105,8 @@ generate_password.grid(column=2, row=3)
 add_button = Button(text="Add", width=30, command=add_password)
 add_button.grid(column=1, row=4, columnspan=2)
 
-
+search_button = Button(text="Search", width=14, command=find_password)
+search_button.grid(column=2, row=1)
 
 
 window.mainloop()
